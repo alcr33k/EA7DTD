@@ -3,14 +3,14 @@ Everything about 7 days to die
 
 This is a website created with the [Anax framwork](https://github.com/mosbth/Anax-MVC). You can post and answer questions and learn evertything about 7 days to die.
 
-How to get your own  versioon of "Everything about 7 days to die"
+How to get your own  version of "Everything about 7 days to die"
 --------------------------------------------------------------------
 
 The easiest way to get the package is to clone it. 
 ```javascript
-git clone https://github.com/alcr33k/CCloak/blob/master/readme.md
+git clone https://github.com/alcr33k/EA7DTD.git
 ```
-but you can also do it manually and download it as a zip (https://github.com/alcr33k/CCloak/archive/master.zip)
+but you can also do it manually and download it as a zip (https://github.com/alcr33k/EA7DTD/archive/master.zip)
 
 License 
 ------------------
