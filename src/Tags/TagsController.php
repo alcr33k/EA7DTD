@@ -43,10 +43,11 @@ class TagsController implements \Anax\DI\IInjectionAware
 				}
 			}
 		}
-		$content = '<h2>Availible tags</h2>';
+		$content = '<div id="tags"><h2>Availible tags</h2>';
 		foreach ($tagArray as $tag) {
 			$content .= '<p>'.$tag.'</p>';
 		}
+		$content .= '</div>';
 		$this->views->add('default/page', [
 			'content' => $content,
 		]);

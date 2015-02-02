@@ -57,6 +57,12 @@ $di->set('TagsController', function() use ($di) {
     return $controller;
 });
 
+$di->set('OpinionsController', function() use ($di) {
+    $controller = new \Anax\Opinions\OpinionsController();
+    $controller->setDI($di);
+    return $controller;
+});
+
 $app->router->add('', function() use ($app) {
 	// home page
 	$app->theme->setTitle("Everrything about 7 days to die");
@@ -75,14 +81,17 @@ $app->router->add('', function() use ($app) {
 		'action'         => 'getPopularTags',
 		'params'        => [],
 	]);
-	$content = '<h1>Senaste poster</h1>';
-	$content .= $newest;
-	$content .= '<h1>Mest aktiva användare</h1>';
-	$content .= $mostActive;
-	$content .= '<h1>Mest populära taggar</h1>';
-	$content .= $popularTags;
-	$app->views->add('default/page', [
-		'content' => $content,
+	$article = $app->fileContent->get('home.md');
+	$article = $app->textFilter->doFilter($article, 'shortcode, markdown');
+	$sidebar = '<h1>Senaste poster</h1>';
+	$sidebar .= $newest;
+	$sidebar .= '<h1>Mest aktiva användare</h1>';
+	$sidebar .= $mostActive;
+	$sidebar .= '<h1>Mest populära taggar</h1>';
+	$sidebar .= $popularTags;
+	$app->views->add('default/home', [
+		'content' => $article,
+		'sidebar' => $sidebar,
 	]);
 });
  

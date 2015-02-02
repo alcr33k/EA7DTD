@@ -1,97 +1,205 @@
-/**
- * General elements
- */
-
-@import url(figure.css);
+@import url("figure.css");
 
 body {
-  color: #333;
-  font-family: arial, sans-serif;
-  overflow-y: scroll;
+     color: #333333;
+     font-family: arial,sans-serif;
+     overflow-y: scroll;
 }
 
 h1 {
-  font-size: 2.2em;
+     font-size: 2.2em;
 }
 
-
-/**
- * Layout of the main page elements 
- */
 #wrapper {
-  margin: 0 auto;
-  width: 980px; 
-  padding: 10px;
+     margin: 0px auto;
+     padding: 10px;
+     width: 980px;
 }
 
+#question {
+     background-color: #fafbfc;
+     border: 1px solid #dee5e7;
+     padding: 20px;
+}
 
-/**
- * Layout for header
- */
-#header {
-  position: relative;
-  margin-bottom: 40px;
+#question h1 {
+     font-family: serif;
+     font-size: 22px;
+     line-height: 1.3;
+     margin-top: -10px;
+     text-decoration: underline;
+}
+
+.poster {
+     font-size: 14px;
+     height: 40px;
+     margin-top: -10px;
+}
+
+.poster p {
+     height: 100%;
+}
+
+.poster img {
+     height: 90%;
+     padding-left: 5px;
+     padding-right: 5px;
+     padding-top: 10px;
+}
+
+.Comment {
+     background-color: #fafbfc;
+     border: 1px solid black;
+     padding: 20px;
+}
+
+#questionDiv {
+     background: none repeat scroll 0% 0% #f0f0f0;
+     padding: 20px;
+}
+
+#questionDiv h1 {
+     margin: 0px;
+}
+
+.question {
+     background: none repeat scroll 0% 0% white;
+     border-bottom: 1px solid #e0e0e0;
+     padding: 5px 20px 0px;
+}
+
+.question a {
+     background: none repeat scroll 0% 0% white;
+     cursor: pointer;
+     font-family: sans-serif;
+     font-weight: normal;
+     text-decoration: none;
+}
+
+.opinions {
+     background: none repeat scroll 0% center #fafbfc;
+     font-size: 14px;
+     margin-left: 25px;
+}
+
+.singleOpinion {
+     border: 1px solid #dee5e7;
+     padding: 10px;
+}
+
+.sidebar h1 {
+     font-size: 20px;
+     margin-bottom: 5px;
+}
+
+.sidebar a {
+     font-size: 14px;
+}
+
+.sidebar {
+     float: right;
+     width: 30%;
+}
+
+.homeArticle {
+     float: left;
+     padding-bottom: 20px;
+     padding-left: 20px;
+     width: 60%;
+}
+
+.homeArticle h1 {
+     margin-top: 15px;
+}
+
+#singleQuestion {
+     border: 1px solid #e0e0e0;
+     padding: 20px;
+}
+
+#singleQuestion h1 {
+     border: 1px solid #e0e0e0;
+     margin-bottom: 0px;
+     margin-top: 0px;
+     padding: 20px;
+}
+
+#tags {
+     background: none repeat scroll 0% 0% #f0f0f0;
+     padding-bottom: 170px;
+     padding-left: 100px;
+}
+
+#tags h2 {
+     padding-right: 150px;
+     text-align: center;
+}
+
+#tags p:nth-child(4n+1) {
+     float: left;
+     margin: 0px;
+     width: 25%;
+}
+
+#tags p:nth-child(4n+2) {
+     float: right;
+     margin: 0px;
+     width: 25%;
+}
+
+#tags p:nth-child(4n+3) {
+     float: right;
+     margin: 0px;
+     width: 25%;
+}
+
+#tags p:nth-child(4n+4) {
+     float: right;
+     margin: 0px;
+     width: 25%;
 }
 
 .sitetitle {
-  position: absolute;
-  top: 6px;
-  left: 130px;
-  font-size: 48px;
+     font-size: 48px;
 }
 
 .siteslogan {
-  position: absolute;
-  top: 65px;
-  left: 130px;
-  font-style: italic;
-  color: #666;
+     color: #666666;
+     font-style: italic;
 }
 
+#header span {
+     padding-right:40px;
+  
+}
 
-/**
- * Layout for main
- */
 #main {
-  min-height: 20em;
+     min-height: 20em;
 }
 
-
-/**
- * Layout for footer
- */
 #footer {
-  margin-top: 40px;
-  border-top: 1px solid #ccc;
-  padding-top: 22px;
+     border-top: 1px solid #cccccc;
+     margin-top: 40px;
+     padding-top: 22px;
 }
 
-.sitefooter {
-  color: #666;
-}
-
-
-/**
- * For articles
- */
 .article1 {
-  width: 700px;
-  border-right: 1px solid #ccc;
-  padding-right: 1em;
+     border-right: 1px solid #cccccc;
+     padding-right: 1em;
+     width: 700px;
 }
 
-.article1 h1,
-.article1 h2 {
-  border-bottom: 1px solid #ccc;
+.article1 h1, .article1 h2 {
+     border-bottom: 1px solid #cccccc;
 }
 
 .byline {
-  margin-top: 44px;
-  border-top: 1px dashed #ccc;
-  padding-top: 22px;
-  color: #666;
+     border-top: 1px dashed #cccccc;
+     color: #666666;
+     margin-top: 44px;
+     padding-top: 22px;
 }
 
 .byline p {
-  margin-top: 0;
+     margin-top: 0px;
 }

@@ -32,10 +32,8 @@ class QuestionsController implements \Anax\DI\IInjectionAware
 		$all = $this->Questions->query()
 			->orderby('created desc LIMIT 10')
 		->execute();
-		$results = '<h3>Newest questions</h3';
-		if ((isset($_SESSION["loginStatus"]) == true) || ($_SESSION["loginStatus"] != null)) {
-			$results .= '<br><p><a href="questions/submit">Post a new question</a></p>';
-		}
+		$results = '<div id="questionDiv"><h1>Newest questions</h1>
+		<br><p><a href="questions/submit">Post a new question</a></p>';
 		foreach ($all as $post) {
 			$poster = $post->poster;
 			$id = $post->id;
@@ -43,6 +41,7 @@ class QuestionsController implements \Anax\DI\IInjectionAware
 			$posted = $post->created;
 			$results .= '<div class="question"><h2><a href="questions/q/'.$id.'">'.$title.'</a></h2><p><b>Posted by:</b><a href="users/u/'.$poster.'">'.$poster.'</a> on '.$posted.'.</div>';
 		}
+		$results .= '</div>';
 		return $results;
 	}
 	/**
@@ -75,12 +74,18 @@ class QuestionsController implements \Anax\DI\IInjectionAware
 		}
 		$id = $all[0]->id;
 		/// $tags = $all[0]->tags;
-		$content = '<div id="question">
-		<h1>'.$title.'</h1>
+		$content = '<div id="singleQuestion"><h1>Question: '.$title.'</h1>
+		<div id="question">
+		<h2>'.$title.'</h2>
 		<p>'.$question.'</p>
-		<img src="'.$gravatar.'" alt="ProfilePicure"/>
-		<p><b>Posted by:</b><a href="../../users/u/'.$poster.'">'.$poster.'</a> on '.$posted.' with the following tags: '.$tags.'</div>';
-		$content .= $this->showComments($id);
+		<div class="poster"><p><b>Posted by:</b><a href="../../users/u/'.$poster.'">'.$poster.'</a><img src="'.$gravatar.'" alt="ProfilePicure"/> on '.$posted.' with the following tags: '.$tags.'</div>';
+		$content .= '</div><div class="opinions">';
+		if((isset($_SESSION["loginStatus"])) && ($_SESSION["loginStatus"] != null)) {
+			$content .= '<p><a href="../../opinions/submit/'.$id.'-0">Comment this question</a></p>';
+		}
+		$content .= $this->showOpinions($id.'-0') .'</div>
+		<a href="../../comments/submit/'.$id.'">Answer this question</a>
+		<h2>Answers</h2>'. $this->showComments($id).'</div>';
 		$this->theme->setTitle($title);
 		
 		$this->views->add('default/page', [
@@ -196,35 +201,52 @@ class QuestionsController implements \Anax\DI\IInjectionAware
 		$this->Comments->setDI($this->di);
 		$filter = new \Anax\Content\CTextFilter();
 		$filter->setDI($this);
-		if((isset($_SESSION["loginStatus"])) && ($_SESSION["loginStatus"] != null)) {
-			$content = '<a href="../../comments/submit/'.$page.'">Submit a comment</a><div class="comments">';
-			$all = $this->Comments->query()
-			->where('threadId = ?')
-			->execute(array($page));
-			foreach ($all as $comment) {
-				$poster = $comment->poster;
-				$id = $comment->id;
-				$bettercomment = $filter->doFilter($comment->comment, 'shortcode, markdown');
-				$posted = $comment->created;
-				$gravatar = $this->getGravatar($poster);
-				$content .= '<div class=poster><a href="../../users/u/'.$poster.'">'.$poster.'</a><img src="'.$gravatar.'" alt="ProfilePicure"/></div><div class="Comment">'.$bettercomment.'</div>';
+		$content = '';
+		$all = $this->Comments->query()
+		->where('threadId = ?')
+		->execute(array($page));
+		foreach ($all as $comment) {
+			$poster = $comment->poster;
+			$id = $comment->id;
+			$opinionId = $page .'-'. $id;
+			$bettercomment = $filter->doFilter($comment->comment, 'shortcode, markdown');
+			$posted = $comment->created;
+			$gravatar = $this->getGravatar($poster);
+			if((isset($_SESSION["loginStatus"])) && ($_SESSION["loginStatus"] != null)) {
+				$content .= '<div class="Comment">'.$bettercomment.'<div class=poster><a href="../../users/u/'.$poster.'">'.$poster.'</a><img src="'.$gravatar.'" alt="ProfilePicure"/></div></div><div class="opinions"><p><a href="../../opinions/submit/'.$page.'-'.$id.'">Comment this answer</a></p>'.$this->showOpinions($opinionId).'</div>';
 			}
-			return $content;
-		}
-		else {
-			$content;
-			$all = $this->Comments->query()
-			->where('threadId = ?')
-			->execute(array($page));
-			foreach ($all as $comment) {
-				$poster = $comment->poster;
-				$id = $comment->id;
-				$bettercomment = $filter->doFilter($comment->comment, 'shortcode, markdown');
-				$posted = $comment->created;
-				$content .= '<div class=poster><a href="../../users/u/'.$poster.'">'.$poster.'</a></div><img src="'.$gravatar.'" alt="ProfilePicure"/><div class="Comment">'.$bettercomment.'</div>';
+			else {
+				$content .= '<div class="Comment">'.$bettercomment.'<div class=poster><a href="../../users/u/'.$poster.'">'.$poster.'</a><img src="'.$gravatar.'" alt="ProfilePicure"/></div></div><div class="opinions">'.$this->showOpinions($opinionId).'</div>';
 			}
-			return $content;
 		}
+		$content .= '</div>';
+		return $content;
+
+	}
+	/**
+	 * Show opinions for post
+	 *
+	 * @param int $page, the pagewith the opinions
+	 *
+	 * @return opinions as html
+	*/
+	private function showOpinions($page) {
+		$this->Opinions = new \Anax\Opinions\Opinion();
+		$this->Opinions->setDI($this->di);
+		$filter = new \Anax\Content\CTextFilter();
+		$filter->setDI($this);
+		$all = $this->Opinions->query()
+		->where('threadId LIKE ?')
+		->execute(array($page));
+		$content = '';
+		foreach ($all as $comment) {
+			$poster = $comment->poster;
+			$id = $comment->id;
+			$bettercomment = $filter->doFilter($comment->opinion, 'shortcode, markdown');
+			$posted = $comment->created;
+			$content .= '<div class="singleOpinion"><p>'.$bettercomment.' - <a href="../../users/u/'.$poster.'">'.$poster.'</a> '.$posted.'</p></div>';
+		}
+		return $content;
 	}
 	/**
 	 * Get gravatar
